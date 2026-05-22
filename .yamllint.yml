@@ -1,0 +1,15 @@
+---
+extends: default
+
+rules:
+  line-length:
+    max: 120
+  # GitHub Actions workflow / config では document-start (---) を 省く
+  # ことが 多い (= 既存 .github/workflows/ci.yml も そう)。
+  document-start: disable
+  # 既存 mlc-config.json は JSON、 yamllint は markdown link checker
+  # の config を 見ない ので 関係 ないが、 将来 yaml 設定 が 増えても
+  # 「ファイル冒頭 truthy 値 が 必要」 ルール は 緩める。
+  truthy:
+    allowed-values: ['true', 'false', 'on', 'off']
+    check-keys: false

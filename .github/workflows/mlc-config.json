@@ -1,0 +1,22 @@
+{
+  "ignorePatterns": [
+    { "pattern": "^https://github.com/kishibashi3/" },
+    { "pattern": "^https://agent-hub-ki.fly.dev/" },
+    { "pattern": "^https?://localhost" },
+    { "pattern": "^https://note\\.com/" },
+    { "pattern": "^https://note\\.ulsconsulting\\.co\\.jp/" },
+    { "pattern": "^https://spec\\.modelcontextprotocol\\.io/" },
+    { "pattern": "^https://modelcontextprotocol\\.io/" },
+    { "pattern": "^https://docs\\.beeai\\.dev/" },
+    { "pattern": "^https://ai\\.google\\.dev/" },
+    { "pattern": "^https://docs\\.claude\\.ai/" },
+    { "pattern": "^\\.\\.\\.?" }
+  ],
+  "replacementPatterns": [],
+  "httpHeaders": [],
+  "timeout": "20s",
+  "retryOn429": true,
+  "retryCount": 3,
+  "fallbackRetryDelay": "30s",
+  "aliveStatusCodes": [200, 206, 400, 402, 403, 429]
+}

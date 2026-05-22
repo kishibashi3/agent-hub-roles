@@ -1,0 +1,53 @@
+name: ci
+
+# doc-only monorepo なので CI は markdown / yaml の sanity check のみ。
+# Python package を 戻す ことに なったら matrix で pytest を 追加 する。
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  markdown-lint:
+    # markdown link check: 全 *.md の relative + absolute link が 有効か 検査。
+    # GitHub Issues / PRs への link は rate limit を 避けるため除外設定。
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Markdown link check
+        uses: gaurav-nelson/github-action-markdown-link-check@v1
+        with:
+          config-file: .github/workflows/mlc-config.json
+          use-quiet-mode: true
+          # private repos 同士 の link は CI 環境 から fetch 不可 なので、
+          # config で除外 (= 後段 で 設定 file を 同梱)。
+          use-verbose-mode: false
+
+  yaml-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install yamllint
+        run: pip install yamllint
+      - name: Run yamllint
+        # CI workflow 自身 + 将来 追加 する yaml を カバー。
+        # inline 設定 は YAML parser を 混乱 させるので 単独 file に 分離 (= .yamllint.yml)。
+        run: yamllint -c .yamllint.yml .github/
+
+  shell-lint:
+    # M1 で scripts/start.sh を 追加 した ため、 bash sanity check を 入れる。
+    # SC1091 (= source 先 が 解析不可) は `.example` を source する pattern が ある ので 除外。
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run shellcheck
+        uses: ludeeus/action-shellcheck@master
+        with:
+          scandir: ./scripts
+          severity: warning

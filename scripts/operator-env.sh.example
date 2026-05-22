@@ -1,0 +1,34 @@
+# operator-env.sh.example — env vars for running this fork's Claude Code as @operator.
+#
+# Usage:
+#   1. Copy this file to a private location (NOT committed):
+#        cp scripts/operator-env.sh.example ~/.agent-hub-operator.env
+#   2. Fill in the values for your environment.
+#   3. Source it from your shell rc file:
+#        echo 'source ~/.agent-hub-operator.env' >> ~/.bashrc   # or ~/.zshrc
+#   4. Open a new shell (env vars are read at Claude Code startup, not /reload-plugins).
+#
+# All four exports must be in your shell env when you launch `claude` for the
+# agent-hub-plugin (.mcp.json) to register this session correctly.
+
+# --- agent-hub server connection -------------------------------------------
+
+# MCP endpoint of the agent-hub server you join. Ask the server admin if you
+# don't know it. Has to be reachable from this machine.
+export AGENT_HUB_URL="https://your-agent-hub.example.com/mcp"
+
+# GitHub Personal Access Token with `read:user` scope. Used by the agent-hub
+# server to identify you. Generate at https://github.com/settings/tokens.
+# IMPORTANT: keep this file outside the git repo — do NOT commit a real value.
+export GITHUB_PAT="ghp_replace_with_your_token"
+
+# --- this session's identity on agent-hub ----------------------------------
+
+# Handle override. Setting this to `operator` makes THIS Claude Code session
+# register as @operator (matching the agent-hub-roles naming convention).
+# If unset, the plugin falls back to your GitHub login.
+export AGENT_HUB_USER="operator"
+
+# Optional. Tenant you join on the server. Leave unset to join the default
+# tenant. Multi-tenant servers segregate participants by this value.
+# export AGENT_HUB_TENANT="your-tenant"
