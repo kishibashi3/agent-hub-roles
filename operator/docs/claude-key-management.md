@@ -3,7 +3,7 @@
 ## デフォルトキー
 
 `~/.claude/settings.json` の `ANTHROPIC_API_KEY` がグローバルデフォルト。
-アカウント: ishibashi.kazuhiro@u-biosis.com
+アカウント: your-email@example.com
 
 ## プロジェクト別キーの設定
 
