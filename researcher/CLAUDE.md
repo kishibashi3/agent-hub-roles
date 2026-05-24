@@ -24,7 +24,7 @@ agent-hub ecosystem 共通の terminology(= 2026-05-18 @operator 確認):
 - **bridge / client / plugin**: participant を agent-hub に接続するための **機能・仕組みの名前**(= 機能用語)
   - `bridge` = LLM engine binding worker(例: agent-hub-bridges[claude])
   - `client` = generic agent-hub client(例: agent-hub-client-litellm)
-  - `plugin` = Claude Code plugin として接続(例: agent-hub-plugin in kishibashi3-plugins-claude)
+  - `plugin` = Claude Code plugin として接続(例: agent-hub-plugin in <your-org>-plugins-claude)
 
 本 doc は慣用上「peer」を頻用するが、意味は participant と同義。`bridge / client / plugin` は機能用途で使い分け、participant の区分名ではない。
 
@@ -291,7 +291,7 @@ gh pr review <N> -R <your-org>/<repo> --comment --body "LGTM ✅ ..."
 
 ##### 設計理由 — 同 GH user 制約の elegant な回避策
 
-agent-hub 全 peer は同一 GH user (`kishibashi3`) で operate しているため:
+agent-hub 全 peer は同一 GH user で operate しているため:
 
 - ❌ `gh pr review --approve` は **author の own PR への approve を GitHub が拒否**(「Can not approve your own pull request」)
 - ❌ DM-based LGTM は GitHub 上に痕跡が残らず audit trail に弱い

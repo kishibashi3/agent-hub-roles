@@ -76,7 +76,7 @@ ecosystem に新規 repo が必要になった場合、**planner が必要性を
 | **peer agent 系** (repo の住人、persona instruction / 思考履歴 / 運用ノウハウを含む) | `agent-hub-roles-kaz` (monorepo: reviewer / planner / researcher 等) | **private** | 内部の思考 / 知識 / 運用ノウハウ / persona instruction を含むため非公開 |
 | **server / core** (agent-hub server 本体) | `agent-hub` | operator 判断 | 現状 private、edition strategy (<your-org>/agent-hub#<N>) の議論で将来 split 可能性あり |
 | **client / utility** | `agent-hub-client-litellm` 等 | 要判断 (L1) | bridge と同じ「LLM API utility」傾向なら public、内部運用 tooling なら private |
-| **plugins / extension** | `kishibashi3-plugins-claude` 等 | (operator 既存判断) | 現状 public、新規追加時は plugins の公開性方針に沿う |
+| **plugins / extension** | `<your-org>-plugins-claude` 等 | (operator 既存判断) | 現状 public、新規追加時は plugins の公開性方針に沿う |
 
 判別境界が曖昧な場合(= 上記表にきれいに当てはまらない)は **L1 として operator に確認** してから作成。
 
