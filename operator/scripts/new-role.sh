@@ -4,12 +4,33 @@
 # Usage:
 #   new-role.sh --from <role-template> --name <handle> --workdir <path> --repos <repo-name>
 #               [--model bridge-claude] [--tenant <tenant>] [--public] [--display-name "..."]
-#               [--dry-run]
+#               [--no-repo] [--no-spawn] [--dry-run]
+#
+# Flags:
+#   --from <role>        Role template to copy CLAUDE.md from (required)
+#   --name <handle>      Bridge handle (@name) (required)
+#   --workdir <path>     Working directory for the new role (required)
+#   --repos <repo-name>  GitHub repo name (required unless --no-repo)
+#   --model <bridge>     Bridge binary alias (default: bridge-claude)
+#   --tenant <tenant>    agent-hub tenant name
+#   --public             Create public GitHub repo (default: private)
+#   --display-name "..." Bridge display name passed to --display-name
+#   --no-repo            Skip GitHub repo create/clone; copy CLAUDE.md into
+#                        --workdir directly and commit to the existing git repo
+#   --no-spawn           Skip bridge spawn after setup
+#   --dry-run            Print what would happen without making changes
 #
 # Required env:
 #   AGENT_HUB_ROLES  — path to the agent-hub-roles repo root
 #   AGENT_HUB_URL    — agent-hub server URL
 #   GITHUB_PAT       — GitHub personal access token
+#
+# Examples:
+#   # Standalone repo (classic):
+#   new-role.sh --from coder --name coder --workdir $AGENT_HUB_BASE/coder --repos coder
+#
+#   # Add to existing monorepo (--no-repo):
+#   new-role.sh --from coder --name philosopher --workdir $AGENT_HUB_ROLES/philosopher --no-repo
 
 set -euo pipefail
 
@@ -19,6 +40,9 @@ TENANT=""
 PUBLIC=false
 DISPLAY_NAME=""
 DRY_RUN=false
+NO_REPO=false
+NO_SPAWN=false
+REPOS=""
 SPAWN_TIMEOUT=30
 
 # ---------- bridge binary map ----------
@@ -39,9 +63,11 @@ while [[ $# -gt 0 ]]; do
         --tenant)       TENANT="$2"; shift 2 ;;
         --public)       PUBLIC=true; shift ;;
         --display-name) DISPLAY_NAME="$2"; shift 2 ;;
+        --no-repo)      NO_REPO=true; shift ;;
+        --no-spawn)     NO_SPAWN=true; shift ;;
         --dry-run)      DRY_RUN=true; shift ;;
         -h|--help)
-            sed -n '2,12p' "$0" | sed 's/^# *//'
+            sed -n '2,29p' "$0" | sed 's/^# *//'
             exit 0 ;;
         *) echo "error: unknown flag: $1" >&2; exit 2 ;;
     esac
@@ -51,8 +77,11 @@ done
 : "${FROM_NAME:?--from is required}"
 : "${NAME:?--name is required}"
 : "${WORKDIR:?--workdir is required}"
-: "${REPOS:?--repos is required}"
 : "${AGENT_HUB_ROLES:?AGENT_HUB_ROLES env is not set}"
+
+if [[ "$NO_REPO" == false ]]; then
+    : "${REPOS:?--repos is required (or pass --no-repo to skip repo creation)}"
+fi
 
 # ---------- name validation (path traversal guard) ----------
 if ! [[ "$NAME" =~ ^[a-z0-9][a-z0-9_-]*$ ]]; then
@@ -75,22 +104,26 @@ case "$SRC_CLAUDE" in
     *) echo "error: resolved path escapes AGENT_HUB_ROLES: $SRC_CLAUDE" >&2; exit 2 ;;
 esac
 
-# workdir basename must match repos
-if [[ "$(basename "$WORKDIR")" != "$REPOS" ]]; then
-    echo "error: --workdir basename ('$(basename "$WORKDIR")') must match --repos ('$REPOS')" >&2
-    echo "       set --workdir to $(dirname "$WORKDIR")/$REPOS" >&2
-    exit 2
+# workdir basename must match repos (only when --no-repo is not set)
+if [[ "$NO_REPO" == false ]]; then
+    if [[ "$(basename "$WORKDIR")" != "$REPOS" ]]; then
+        echo "error: --workdir basename ('$(basename "$WORKDIR")') must match --repos ('$REPOS')" >&2
+        echo "       set --workdir to $(dirname "$WORKDIR")/$REPOS" >&2
+        exit 2
+    fi
 fi
 
-# bridge binary must exist
-BRIDGE_BIN="${BRIDGE_BINARIES[$MODEL]:-}"
-if [[ -z "$BRIDGE_BIN" ]]; then
-    echo "error: unknown --model '$MODEL'. Valid: ${!BRIDGE_BINARIES[*]}" >&2
-    exit 2
-fi
-if ! command -v "$BRIDGE_BIN" &>/dev/null; then
-    echo "error: binary not found: $BRIDGE_BIN. Is agent-hub-bridges installed?" >&2
-    exit 2
+# bridge binary must exist (skip when --no-spawn)
+if [[ "$NO_SPAWN" == false ]]; then
+    BRIDGE_BIN="${BRIDGE_BINARIES[$MODEL]:-}"
+    if [[ -z "$BRIDGE_BIN" ]]; then
+        echo "error: unknown --model '$MODEL'. Valid: ${!BRIDGE_BINARIES[*]}" >&2
+        exit 2
+    fi
+    if ! command -v "$BRIDGE_BIN" &>/dev/null; then
+        echo "error: binary not found: $BRIDGE_BIN. Is agent-hub-bridges installed?" >&2
+        exit 2
+    fi
 fi
 
 # ---------- dry-run checks ----------
@@ -105,14 +138,26 @@ else
     ISSUES+=("OK    --workdir: $WORKDIR (will be created)")
 fi
 
-if gh repo view "$REPOS" &>/dev/null 2>&1; then
-    ISSUES+=("WARN  --repos: repo already exists on GitHub (will clone existing)")
+if [[ "$NO_REPO" == true ]]; then
+    ISSUES+=("OK    --no-repo: skipping GitHub repo create/clone")
+    # verify workdir is inside an existing git repo
+    if ! git -C "$(dirname "$WORKDIR")" rev-parse --git-dir &>/dev/null 2>&1; then
+        ISSUES+=("WARN  --no-repo: parent of --workdir does not appear to be inside a git repo")
+    fi
 else
-    ISSUES+=("OK    --repos: will create $REPOS")
+    if gh repo view "$REPOS" &>/dev/null 2>&1; then
+        ISSUES+=("WARN  --repos: repo already exists on GitHub (will clone existing)")
+    else
+        ISSUES+=("OK    --repos: will create $REPOS")
+    fi
 fi
 
-[[ -z "${AGENT_HUB_URL:-}" ]] && ISSUES+=("WARN  AGENT_HUB_URL: not set")
-[[ -z "${GITHUB_PAT:-}" ]]    && ISSUES+=("WARN  GITHUB_PAT: not set")
+if [[ "$NO_SPAWN" == true ]]; then
+    ISSUES+=("OK    --no-spawn: skipping bridge spawn")
+else
+    [[ -z "${AGENT_HUB_URL:-}" ]] && ISSUES+=("WARN  AGENT_HUB_URL: not set")
+    [[ -z "${GITHUB_PAT:-}" ]]    && ISSUES+=("WARN  GITHUB_PAT: not set")
+fi
 
 echo "=== dry-run checks ==="
 for line in "${ISSUES[@]}"; do
@@ -129,24 +174,26 @@ echo "=> OK: all checks passed"
 
 # ---------- actual execution ----------
 
-# 1. create parent dir if needed
-mkdir -p "$(dirname "$WORKDIR")"
+# 1. create workdir if needed
+mkdir -p "$WORKDIR"
 
-# 2. create or clone repo
-if gh repo view "$REPOS" &>/dev/null 2>&1; then
-    echo "==> repo '$REPOS' already exists, cloning..."
-    gh repo clone "$REPOS" "$WORKDIR"
-else
-    echo "==> creating repo '$REPOS'..."
-    VISIBILITY_FLAG="--private"
-    [[ "$PUBLIC" == true ]] && VISIBILITY_FLAG="--public"
-    gh repo create "$REPOS" "$VISIBILITY_FLAG" --clone --gitignore "" 2>/dev/null || \
-        gh repo create "$REPOS" "$VISIBILITY_FLAG" --clone
-    # gh repo create --clone creates in cwd/<repos>/
-    # move to workdir if different
-    CLONED_DIR="$(pwd)/$REPOS"
-    if [[ "$CLONED_DIR" != "$WORKDIR" ]]; then
-        mv "$CLONED_DIR" "$WORKDIR"
+if [[ "$NO_REPO" == false ]]; then
+    # 2. create or clone repo
+    if gh repo view "$REPOS" &>/dev/null 2>&1; then
+        echo "==> repo '$REPOS' already exists, cloning..."
+        gh repo clone "$REPOS" "$WORKDIR"
+    else
+        echo "==> creating repo '$REPOS'..."
+        VISIBILITY_FLAG="--private"
+        [[ "$PUBLIC" == true ]] && VISIBILITY_FLAG="--public"
+        gh repo create "$REPOS" "$VISIBILITY_FLAG" --clone --gitignore "" 2>/dev/null || \
+            gh repo create "$REPOS" "$VISIBILITY_FLAG" --clone
+        # gh repo create --clone creates in cwd/<repos>/
+        # move to workdir if different
+        CLONED_DIR="$(pwd)/$REPOS"
+        if [[ "$CLONED_DIR" != "$WORKDIR" ]]; then
+            mv "$CLONED_DIR" "$WORKDIR"
+        fi
     fi
 fi
 
@@ -162,10 +209,15 @@ sed -i "s|- \*\*workdir\*\*: \`.*\`|- **workdir**: \`${WORKDIR}/\`|" "$WORKDIR/C
 # 5. git commit + push
 echo "==> committing and pushing..."
 git -C "$WORKDIR" add CLAUDE.md
-git -C "$WORKDIR" commit -m "add: ${FROM_NAME} CLAUDE.md (new-role)"
+git -C "$WORKDIR" commit -m "add: ${FROM_NAME} CLAUDE.md (new-role: @${NAME})"
 git -C "$WORKDIR" push origin main
 
-# 6. spawn bridge
+# 6. spawn bridge (skip if --no-spawn)
+if [[ "$NO_SPAWN" == true ]]; then
+    echo "==> --no-spawn: skipping bridge spawn. Setup complete."
+    exit 0
+fi
+
 LOG="/tmp/bridge-${NAME}.log"
 echo "" > "$LOG"
 
