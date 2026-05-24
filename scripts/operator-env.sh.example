@@ -40,11 +40,11 @@ export AGENT_HUB_USER="operator"
 # Example: ~/app/private  or  ~/projects
 export AGENT_HUB_BASE="$HOME/app/private"
 
-# Root of your overall workspace. Optional — defaults to AGENT_HUB_BASE if
-# unset. Set this only if your top-level CLAUDE.md or shared config lives
-# above AGENT_HUB_BASE (e.g. AGENT_HUB_ROOT=~/app, AGENT_HUB_BASE=~/app/private).
-# export AGENT_HUB_ROOT="$HOME/app"
-# Scripts resolve it as: AGENT_HUB_ROOT="${AGENT_HUB_ROOT:-$AGENT_HUB_BASE}"
+# Root of your overall workspace. Set to the same value as AGENT_HUB_BASE if
+# your repos and top-level CLAUDE.md live in the same directory. Set separately
+# only if CLAUDE.md lives above AGENT_HUB_BASE
+# (e.g. AGENT_HUB_ROOT=~/app, AGENT_HUB_BASE=~/app/private).
+export AGENT_HUB_ROOT="$AGENT_HUB_BASE"
 
 # Path to your agent-hub-roles fork (used by new-role.sh and bridges).
 export AGENT_HUB_ROLES="$AGENT_HUB_BASE/agent-hub-roles-kaz"
