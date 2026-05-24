@@ -145,7 +145,7 @@ if [[ "$NO_REPO" == true ]]; then
         ISSUES+=("WARN  --no-repo: parent of --workdir does not appear to be inside a git repo")
     fi
 else
-    if gh repo view "$REPOS" &>/dev/null 2>&1; then
+    if gh repo view "$REPOS" &>/dev/null; then
         ISSUES+=("WARN  --repos: repo already exists on GitHub (will clone existing)")
     else
         ISSUES+=("OK    --repos: will create $REPOS")
@@ -174,12 +174,17 @@ echo "=> OK: all checks passed"
 
 # ---------- actual execution ----------
 
-# 1. create workdir if needed
-mkdir -p "$WORKDIR"
+# 1. create workdir (--no-repo: mkdir workdir; default: mkdir parent only,
+#    gh repo create --clone creates the leaf dir itself)
+if [[ "$NO_REPO" == true ]]; then
+    mkdir -p "$WORKDIR"
+else
+    mkdir -p "$(dirname "$WORKDIR")"
+fi
 
 if [[ "$NO_REPO" == false ]]; then
     # 2. create or clone repo
-    if gh repo view "$REPOS" &>/dev/null 2>&1; then
+    if gh repo view "$REPOS" &>/dev/null; then
         echo "==> repo '$REPOS' already exists, cloning..."
         gh repo clone "$REPOS" "$WORKDIR"
     else
