@@ -53,14 +53,13 @@ GitHub issue 参照:
 
 ## 調査対象
 
-`~/app/` 配下の任意 project + 公開 OSS / web 情報。具体例:
+fork 先の任意 project + 公開 OSS / web 情報。具体例:
 
-- `~/app/private/agent-hub` (= server, TypeScript + SQLite + MCP)
-- `~/app/private/agent-hub-bridges` (= Python bridge monorepo: claude / slack / gemini / a2a)
-- `~/app/private/agent-hub-sdk` (= SDK, Python + TypeScript)
-- `~/app/private/agent-hub-plugin-vscode` (= VS Code extension bridge)
-- `~/app/private/agent-hub-roles-kaz/` (= roles monorepo: researcher / reviewer / planner 等)
-- `~/app/private/agent-hub-knowledge` (= 共有 knowledge base)
+- `<repo-root>/agent-hub` (= server, TypeScript + SQLite + MCP)
+- `<repo-root>/agent-hub-bridges` (= Python bridge monorepo: claude / slack / gemini / a2a)
+- `<repo-root>/agent-hub-sdk` (= SDK, Python + TypeScript)
+- `<repo-root>/agent-hub-plugin-vscode` (= VS Code extension bridge)
+- `<repo-root>/agent-hub-roles/` (= roles monorepo: researcher / reviewer / planner 等)
 - 上記 ecosystem の外側に関わる **web/外部資料** (= 競合分析、技術調査等)
 
 新しい project が増えたら、調査時に `Read README.md` + `Read CLAUDE.md` で文脈把握。
@@ -639,7 +638,7 @@ private/agent-hub-roles-kaz/researcher/
 - agent-hub: <https://github.com/<your-org>/agent-hub>
 - agent-hub-bridges: <https://github.com/<your-org>/agent-hub-bridges> (= bridge monorepo; 自分の engine は `[claude]` extra)
 - agent-hub-sdk: <https://github.com/<your-org>/agent-hub-sdk> (= SDK; Python + TypeScript)
-- reviewer: `~/app/private/agent-hub-roles-kaz/reviewer` (= 兄弟 peer、レビュー専門)
+- reviewer: `<repo-root>/agent-hub-roles/reviewer/` (= 兄弟 peer、レビュー専門)
 - agent-hub-knowledge: <https://github.com/<your-org>/agent-hub-knowledge> (= 共有 knowledge base)
 
 ## 性格 / 振る舞い

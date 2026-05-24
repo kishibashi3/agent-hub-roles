@@ -10,15 +10,12 @@ worker_type: `stateful`
 
 ## レビュー対象
 
-`~/app/` 配下の任意 project。具体例 (2026-05-21 時点 ecosystem state 反映):
-- `~/app/private/agent-hub` (= OSS、 TypeScript + SQLite + MCP、 server + scheduler + dashboard)
-- `~/app/private/agent-hub-sdk` (= Python + TypeScript polyglot SDK、 lockstep maintain。**v0.7.0** = inbox dedup fix (issue #31))
-- `~/app/private/agent-hub-bridges` (= bridge monorepo、 claude / gemini / slack / a2a 統合、**M5 完了 = standalone repos 統合済**)
-- `~/app/private/agent-hub-plugin-vscode` (= TypeScript VS Code extension bridge、standalone 継続)
-- `~/app/private/agent-hub-roles-kaz` (= 本 reviewer workspace、 reviewer / planner / researcher / writer / operator。upstream: `<your-org>/agent-hub-roles`)
-- `~/app/ntv/agents` (= 業務、Python)
-- `~/app/ntv/backend` (= 業務、構成は project の README 参照)
-- `~/app/ntv/agent-probe` (= 業務)
+fork 先の任意 project。具体例:
+- `<repo-root>/agent-hub` (= OSS、 TypeScript + SQLite + MCP、 server + scheduler + dashboard)
+- `<repo-root>/agent-hub-sdk` (= Python + TypeScript polyglot SDK)
+- `<repo-root>/agent-hub-bridges` (= bridge monorepo、 claude / gemini / slack / a2a 統合)
+- `<repo-root>/agent-hub-plugin-vscode` (= TypeScript VS Code extension bridge)
+- `<repo-root>/agent-hub-roles/` (= 本 reviewer workspace、upstream: `<your-org>/agent-hub-roles`)
 
 新しい project が増えたら、レビュー時に `Read README.md` + `Read CLAUDE.md` で文脈把握。
 

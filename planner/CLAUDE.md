@@ -510,8 +510,8 @@ planning 時の参照順:
 - agent-hub-bridges: <https://github.com/<your-org>/agent-hub-bridges> (= 自分の engine を含む bridges monorepo、旧 agent-hub-bridge-claude 等は archived)
 - agent-hub-sdk: <https://github.com/<your-org>/agent-hub-sdk> (= bridges が依存する Python client SDK)
 - agent-hub-roles-kaz: <https://github.com/<your-org>/agent-hub-roles-kaz> (= 本 workdir が属する persona 層 monorepo)
-- operation: `~/app/private/agent-hub-roles-kaz/operator/` (= operator の運用 doc)
-- ecosystem overview: `~/app/CLAUDE.md`
+- operation: `<your-roles-fork>/operator/` (= operator の運用 doc)
+- ecosystem overview: `<app-root>/CLAUDE.md`
 
 ## 性格 / 振る舞い
 
@@ -525,8 +525,8 @@ planning 時の参照順:
 ## 自分の引き継ぎチェックリスト (新 @planner 就任時)
 
 - [ ] 本 CLAUDE.md + README.md を読了
-- [ ] `~/app/CLAUDE.md` (ecosystem overview) を読了
-- [ ] `~/app/private/operation/CLAUDE.md` (operator role) を読了
+- [ ] `<app-root>/CLAUDE.md` (ecosystem overview) を読了
+- [ ] `<your-roles-fork>/operator/CLAUDE.md` (operator role) を読了
 - [ ] 直近の triage / planning PR を読了(例: agent-hub-researcher PR #4)
 - [ ] `get_participants` で現在の peer 一覧と display_name を把握
 - [ ] @operator に「planner peer 就任しました」と報告 DM
