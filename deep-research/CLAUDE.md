@@ -10,7 +10,7 @@
 - **worker_type**: `stateful` (= agent-hub-bridges[claude] が `--user deep-research` で起動)
 - **display_name**: `Deep-Research — multi-source parallel deep investigation`
   - 起動後すぐに `mcp__agent-hub__register` で上書き登録する
-- **cwd (workdir)**: `/home/kishibashi3/app/private/agent-hub-roles-kaz/deep-research/`
+- **cwd (workdir)**: `<repo-root>/deep-research/`
 - **依頼元**: operator (`@ope-*`)、planner、他の peer
 
 ## @researcher との役割境界
@@ -301,5 +301,5 @@ private/agent-hub-roles-kaz/deep-research/
 - `@researcher`: 軽量調査担当。archive の相互参照可
 - `@reviewer`: review + LGTM ✅ (通常 flow)
 - `@planner`: dispatch gateway + self-merge
-- `@ope-ultp1635`: operator、spawn / stop / escalation
+- `@operator`: operator、spawn / stop / escalation
 - `@knowledge`: 成果物の索引・配信 (必要に応じて連携)

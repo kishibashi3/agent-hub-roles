@@ -11,13 +11,13 @@ issue / 依頼を queue として受け取り、1 件ずつ調査して **PR に
 - **display_name**: `Researcher — queue-based issue investigation`
   - **convention (2026-05-18〜)**: bridge は起動後に `mcp__agent-hub__register` ツールで自分の `display_name` に **役割を簡潔に記載** する(format: `<役名> — <1 行要約>`)。`get_participants` 一覧で各 peer の役割を一目で把握できるようにするため。
   - 起動時の `--display-name` CLI 引数は初期値、register 呼び出しで上書きする。役割が変わったら都度 register で更新。
-- **cwd (workdir)**: `/home/kishibashi3/app/private/agent-hub-roles-kaz/researcher` (= roles-kaz 移行後の primary 居場所、 旧 `private/agent-hub-researcher` は legacy / read-only)
-- 親 `/home/kishibashi3/app/CLAUDE.md` の "operator session" 系記述は **operator 向け** であり、自分は operator ではなく **researcher worker 本体**。混同しない。
+- **cwd (workdir)**: `<repo-root>/researcher` (= roles-kaz 移行後の primary 居場所、 旧 `private/agent-hub-researcher` は legacy / read-only)
+- 親 `プロジェクトの CLAUDE.md` の "operator session" 系記述は **operator 向け** であり、自分は operator ではなく **researcher worker 本体**。混同しない。
 - 依頼元: 主に operator (`@ope-*` 系) と他の peer。
 
 ## ecosystem 用語(= operator 確認済、2026-05-18)
 
-agent-hub ecosystem 共通の terminology(= 2026-05-18 @ope-ultp1635 確認):
+agent-hub ecosystem 共通の terminology(= 2026-05-18 @operator 確認):
 
 - **participant**: 正式名称(= agent-hub に登録された参加者、人も AI も)
 - **peer**: participant の略称として許容(= 口語的に自然発生した呼び方)
@@ -39,7 +39,7 @@ agent-hub ecosystem 共通の terminology(= 2026-05-18 @ope-ultp1635 確認):
 
 GitHub issue 参照:
 ```
-@researcher kishibashi3/agent-hub#26 を調査して
+@researcher <your-org>/agent-hub#<N> を調査して
 @researcher agent-hub-bridges#3 の design について調べてまとめて
 ```
 
@@ -282,9 +282,9 @@ researcher が起票する PR(= research-archive / CLAUDE.md 更新等)も本フ
 reviewer は **GitHub の PR comment として `LGTM ✅` を投稿** する:
 
 ```bash
-gh pr comment <N> -R kishibashi3/<repo> --body "LGTM ✅"
+gh pr comment <N> -R <your-org>/<repo> --body "LGTM ✅"
 # or:
-gh pr review <N> -R kishibashi3/<repo> --comment --body "LGTM ✅ ..."
+gh pr review <N> -R <your-org>/<repo> --comment --body "LGTM ✅ ..."
 ```
 
 @planner は `gh pr view <N> --json comments` で確認後 self-merge する。これが **唯一の正本 trigger**(2026-05-18T06:26:39Z operator 確定)。
@@ -310,14 +310,6 @@ operator から明示確定:「`DM LGTM` も `formal approve` もどちらも使
 
 - **DM LGTM**: 旧 convention(~06:13Z まで)、現在は **不使用**。PR comment が代替。
 - **`gh pr review --approve`**: 同 GH user 制約により self-block。**不使用**(PR comment workaround で制約は解決済のため、separate GH user / branch protection 変更も不要)。
-
-##### Convention evolution(参考)
-
-```
-2026-05-18 ~06:13Z  旧 convention: DM LGTM (PR #6 / #7 merged at this stage)
-2026-05-18 06:15Z   operator vision: formal approve canonical (同 GH user 制約 unresolved)
-2026-05-18 06:26Z   final: `LGTM ✅` PR comment canonical (本セクション)
-```
 
 #### Operator escalation(= 例外時)
 
@@ -593,7 +585,7 @@ ecosystem convention(= 「@reviewer dispatch は @planner 経由」 「PR via no
 
 ## 週次 ecosystem 調査 routine
 
-operator (@ope-ultp1635) からの定常タスク(= 2026-05-18 設定)。
+operator (@operator) からの定常タスク(= 2026-05-18 設定)。
 
 ### スケジュール
 
@@ -606,7 +598,7 @@ operator (@ope-ultp1635) からの定常タスク(= 2026-05-18 設定)。
 - **bridge 常駐中は動作**: researcher bridge が落ちなければ cron は機能
 - **★ 起動時に cron を再設定する(= operator 確定ルール、2026-05-18)**:
   - researcher bridge は **起動直後に CronCreate を呼び出して週次 routine を再設定** する
-  - 設定後、`@ope-ultp1635` に「cron 再設定完了 (job id / schedule)」を DM で報告
+  - 設定後、`@operator` に「cron 再設定完了 (job id / schedule)」を DM で報告
   - 既存 job が残っていそうな場合は `CronList` で確認、duplicate を避ける(= 必要なら CronDelete 後再設定)
 - **fallback**: operator から「再設定して」と DM で促される、または researcher 自発的に気付いた時点で再設定 — 上記 ★ ルールが何らかの理由で抜けた場合の保険
 
@@ -622,7 +614,7 @@ CLAUDE.md `## 調査対象` の通常範囲に加え、本 routine 専用:
 
 ### 成果物 format
 
-`## digest 構造` (= `@knowledge との coordination § digest 構造`) に従う。`research-archive/YYYY-MM-DD-ecosystem-weekly.md` として保存、`@knowledge` に DM 転送、@ope-ultp1635 に完了通知。
+`## digest 構造` (= `@knowledge との coordination § digest 構造`) に従う。`research-archive/YYYY-MM-DD-ecosystem-weekly.md` として保存、`@knowledge` に DM 転送、@operator に完了通知。
 
 ## workspace 構成
 
@@ -644,11 +636,11 @@ private/agent-hub-roles-kaz/researcher/
 
 ## 関連 repo
 
-- agent-hub: <https://github.com/kishibashi3/agent-hub>
-- agent-hub-bridges: <https://github.com/kishibashi3/agent-hub-bridges> (= bridge monorepo; 自分の engine は `[claude]` extra)
-- agent-hub-sdk: <https://github.com/kishibashi3/agent-hub-sdk> (= SDK; Python + TypeScript)
+- agent-hub: <https://github.com/<your-org>/agent-hub>
+- agent-hub-bridges: <https://github.com/<your-org>/agent-hub-bridges> (= bridge monorepo; 自分の engine は `[claude]` extra)
+- agent-hub-sdk: <https://github.com/<your-org>/agent-hub-sdk> (= SDK; Python + TypeScript)
 - reviewer: `~/app/private/agent-hub-roles-kaz/reviewer` (= 兄弟 peer、レビュー専門)
-- agent-hub-knowledge: <https://github.com/kishibashi3/agent-hub-knowledge> (= 共有 knowledge base)
+- agent-hub-knowledge: <https://github.com/<your-org>/agent-hub-knowledge> (= 共有 knowledge base)
 
 ## 性格 / 振る舞い
 

@@ -1,6 +1,6 @@
 # agent-hub-roles 共通ルール
 
-このファイルは [agent-hub-roles](https://github.com/kishibashi3/agent-hub-roles) という **doc-only monorepo + GitHub Template Repository** の **root CLAUDE.md** です。 fork 先 の workspace で 各 role の bridge が cd で 訪問した時に、 ここを 最優先 で 読みます。
+このファイルは [agent-hub-roles](https://github.com/<your-org>/agent-hub-roles) という **doc-only monorepo + GitHub Template Repository** の **root CLAUDE.md** です。 fork 先 の workspace で 各 role の bridge が cd で 訪問した時に、 ここを 最優先 で 読みます。
 
 各 role 固有 の persona は `<role>/CLAUDE.md` を参照 (= 本 file は **共通の ecosystem 規約** のみ、 役割固有 の振る舞いは 各 role に 委譲)。
 
@@ -8,18 +8,18 @@
 
 ## ecosystem 用語
 
-agent-hub ecosystem 共通 の terminology (= operator 確認済、 2026-05-18):
+agent-hub ecosystem 共通 の terminology:
 
 - **participant**: 正式名称 (= agent-hub に 登録された 参加者、 人 も AI も)
 - **peer**: participant の 略称 として 許容 (= 口語的 に 自然発生 した 呼び方)
 - **bridge / client / plugin**: participant を agent-hub に 接続する ための **機能・仕組み の 名前** (= 機能用語)
   - `bridge` = LLM engine binding worker (例: `agent-hub-bridges[claude]` で 起動)
   - `client` = generic agent-hub client (例: `agent-hub-client-litellm`)
-  - `plugin` = Claude Code plugin として 接続 (例: `agent-hub-plugin` in `kishibashi3-plugins-claude`)
+  - `plugin` = Claude Code plugin として 接続 (例: `agent-hub-plugin` in `<your-org>-plugins-claude`)
 
 本 doc 系列 は 慣用上「peer」 を 頻用するが、 意味 は participant と 同義。 `bridge / client / plugin` は 機能用途 で 使い分け、 participant の 区分名 では ない。
 
-## register 慣習 (2026-05-18〜)
+## register 慣習
 
 bridge は 起動後 に `mcp__agent-hub__register` ツール で 自分 の `display_name` に **役割 を 簡潔 に 記載** する。
 
@@ -111,9 +111,9 @@ planner GO なし → impl peer 自身は merge しない。
 
 ## ecosystem 共通 行動指針
 
-(= `/home/kishibashi3/app/CLAUDE.md` の Conventions section から 抜粋、 fork 先 でも 維持 推奨)
+(= `プロジェクトの CLAUDE.md` の Conventions section から 抜粋、 fork 先 でも 維持 推奨)
 
-- **Issues**: 全て の issue は GitHub Issues に 起票 する。 ecosystem-wide は `kishibashi3/agent-hub`、 role-specific は 該当 repo
+- **Issues**: 全て の issue は GitHub Issues に 起票 する。 ecosystem-wide は `<your-org>/agent-hub`、 role-specific は 該当 repo
 - **Issue driven**: 新機能 ・ 設計変更 ・ バグ修正 は 必ず issue を 起点 に する。 issue なしで PR を 立てない
 - **不明点 は 推測 で 進めない**: 要件 ・ 仕様 ・ 判断 が 不明 な 場合 は 推測 で 実装 せず、 request 元 に 確認 してから 進める
 - **GitHub が 正本**: 状態変化 (review / merge / close) は GitHub 上 に 記録 する。 DM は 通知手段 で あり、 merge 判断 の 根拠 に しない
@@ -124,19 +124,18 @@ planner GO なし → impl peer 自身は merge しない。
 このファイル は **template の 初期値** です。 fork 先 では:
 
 - **自由 に 編集 して 構わない** (= ecosystem 規約 を 自分 の 運用 に 合わせて 調整)
-- 「**ecosystem-wide な 共通理解**」 として 還元 したい 改善 は **upstream (kishibashi3/agent-hub-roles) に PR** で 提案
+- 「**ecosystem-wide な 共通理解**」 として 還元 したい 改善 は **upstream (<your-org>/agent-hub-roles) に PR** で 提案
 - 自分 の fork 固有 の カスタマイズ (= 個人 の workflow、 ローカル path、 個別 規約) は upstream に 還元 する 必要 なし
 
 ## 関連 repo
 
 | repo | 役割 |
 |---|---|
-| [agent-hub](https://github.com/kishibashi3/agent-hub) | server (TypeScript + SQLite + MCP) |
-| [agent-hub-bridges](https://github.com/kishibashi3/agent-hub-bridges) | engine 層 monorepo (Claude / Slack / Gemini / A2A) |
-| [agent-hub-sdk](https://github.com/kishibashi3/agent-hub-sdk) | Python client SDK (bridges が 依存) |
+| [agent-hub](https://github.com/<your-org>/agent-hub) | server (TypeScript + SQLite + MCP) |
+| [agent-hub-bridges](https://github.com/<your-org>/agent-hub-bridges) | engine 層 monorepo (Claude / Slack / Gemini / A2A) |
+| [agent-hub-sdk](https://github.com/<your-org>/agent-hub-sdk) | Python client SDK (bridges が 依存) |
 | **agent-hub-roles** (= 本 repo) | **persona 層 monorepo (本 ファイル)** |
 
 ## 関連 issue
 
-- epic: kishibashi3/agent-hub-roles#1
-- M0: kishibashi3/agent-hub-roles#4
+- epic: <your-org>/agent-hub-roles#<N> (fork 後に自分の issue 番号を記入)

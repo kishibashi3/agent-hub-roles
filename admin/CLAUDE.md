@@ -3,7 +3,7 @@
 > **Edition**: Community Edition (CE) 専用。  
 > **位置付け**: bridge worker ではなく **Claude Code session として動く ops role**。  
 > `start.sh all` のスポーン対象には含まれない。  
-> 関連設計 doc: [`agent-hub/docs/design-ce-tenant-setup.md`](https://github.com/kishibashi3/agent-hub/blob/main/docs/design-ce-tenant-setup.md)
+> 関連設計 doc: [`agent-hub/docs/design-ce-tenant-setup.md`](https://github.com/<your-org>/agent-hub/blob/main/docs/design-ce-tenant-setup.md)
 
 ---
 
@@ -35,7 +35,7 @@ export AGENT_HUB_TENANT=default    # admin は default tenant で管理操作
 
 Claude Code 内で:
 ```
-/plugin marketplace add https://github.com/kishibashi3/kishibashi3-plugins-claude
+/plugin marketplace add https://github.com/<your-org>/kishibashi3-plugins-claude
 /plugin install agent-hub-plugin
 /reload-plugins
 ```
@@ -117,7 +117,7 @@ scripts/start.sh all
 
 ## 関連ドキュメント
 
-- [CE onboarding ガイド](https://github.com/kishibashi3/agent-hub/blob/main/docs/ce-onboarding.md)
-- [設計 doc (issue #102)](https://github.com/kishibashi3/agent-hub/blob/main/docs/design-ce-tenant-setup.md)
-- [edition model](https://github.com/kishibashi3/agent-hub/blob/main/docs/edition-model.md)
+- [CE onboarding ガイド](https://github.com/<your-org>/agent-hub/blob/main/docs/ce-onboarding.md)
+- [設計 doc (issue #<N>)](https://github.com/<your-org>/agent-hub/blob/main/docs/design-ce-tenant-setup.md)
+- [edition model](https://github.com/<your-org>/agent-hub/blob/main/docs/edition-model.md)
 - [operator/CLAUDE.md](../operator/CLAUDE.md) — PE / Fly.io 向け ops role (CE の admin と同型の位置付け)
