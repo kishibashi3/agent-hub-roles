@@ -32,3 +32,19 @@ export AGENT_HUB_USER="operator"
 # Optional. Tenant you join on the server. Leave unset to join the default
 # tenant. Multi-tenant servers segregate participants by this value.
 # export AGENT_HUB_TENANT="your-tenant"
+
+# --- filesystem layout -------------------------------------------------------
+
+# Base directory where agent-hub repos are installed. Required for scripts
+# like new-role.sh that need to locate sibling repos.
+# Example: ~/app/private  or  ~/projects
+export AGENT_HUB_BASE="$HOME/app/private"
+
+# Root of your overall workspace. Optional — defaults to AGENT_HUB_BASE if
+# unset. Set this only if your top-level CLAUDE.md or shared config lives
+# above AGENT_HUB_BASE (e.g. AGENT_HUB_ROOT=~/app, AGENT_HUB_BASE=~/app/private).
+# export AGENT_HUB_ROOT="$HOME/app"
+# Scripts resolve it as: AGENT_HUB_ROOT="${AGENT_HUB_ROOT:-$AGENT_HUB_BASE}"
+
+# Path to your agent-hub-roles fork (used by new-role.sh and bridges).
+export AGENT_HUB_ROLES="$AGENT_HUB_BASE/agent-hub-roles-kaz"
