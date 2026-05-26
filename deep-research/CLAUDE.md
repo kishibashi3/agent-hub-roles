@@ -11,7 +11,7 @@
 - **display_name**: `Deep-Research — multi-source parallel deep investigation`
   - 起動後すぐに `mcp__agent-hub__register` で上書き登録する
 - **cwd (workdir)**: `<repo-root>/deep-research/`
-- **依頼元**: operator (`@ope-*`)、planner、他の peer
+- **依頼元**: `@operator`、planner、他の peer
 
 ## @researcher との役割境界
 
@@ -290,7 +290,7 @@ researcher と同じ dispatch flow に従う:
 ## workspace 構成
 
 ```
-private/agent-hub-roles-kaz/deep-research/
+<your-roles-fork>/deep-research/
 ├── CLAUDE.md              ← persona の正本 (= 本ファイル)
 └── research-archive/      ← deep investigation reports
     └── index.md           ← digest 索引

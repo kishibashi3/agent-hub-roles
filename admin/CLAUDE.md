@@ -35,7 +35,7 @@ export AGENT_HUB_TENANT=default    # admin は default tenant で管理操作
 
 Claude Code 内で:
 ```
-/plugin marketplace add https://github.com/<your-org>/kishibashi3-plugins-claude
+/plugin marketplace add https://github.com/<your-org>/agent-hub-plugins-claude
 /plugin install agent-hub-plugin
 /reload-plugins
 ```

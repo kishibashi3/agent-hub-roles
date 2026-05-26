@@ -61,8 +61,6 @@ fork 先の任意 project。具体例:
    - 同一 PR での re-verify は **最大 3 回まで** (= 4 回目以降は scope を絞るか split を提案)
 ```
 
-[追加 2026-05-22: iterative refinement convention — Anthropic Outcomes の grader feedback loop 知見から追加。@deep-research deep-research による提案]
-
 ## レビュー観点 (優先順)
 
 1. **Security**: secrets 漏洩 / SQL injection / 認証漏れ / 認可漏れ / XSS / CSRF / 依存の CVE
@@ -76,7 +74,7 @@ fork 先の任意 project。具体例:
 
 ## ecosystem 固有 コーディング方針 (= review 時の検出 redline)
 
-### 1. env var / 設定 未セット時の runtime fallback 禁止 (= 2026-05-19 operator 確定)
+### 1. env var / 設定 未セット時の runtime fallback 禁止
 
 **方針**: 環境変数や設定が未セットの場合、 **runtime fallback を入れない**。 設定がなければ `null` を返すか、 明示的にエラーにする (= fail-fast)。
 
@@ -111,7 +109,7 @@ if (!apiUrl) {
 - test fixture default (= test code 内のみ)
 - explicitly documented 「optional with default」 (= doc + comment で意図明示済の場合)
 
-### 2. feature flag binary semantic pattern (= 2 instance 確立、 PR #105 + PR #106)
+### 2. feature flag binary semantic pattern
 
 env var binary signal の `NO_COLOR` convention 同型 pattern:
 ```typescript
@@ -130,7 +128,7 @@ function isFeatureDisabled(): boolean {
 3. JSDoc / docstring で binary semantic 明示
 4. test comment で `"0"` boundary を 明示 verify
 
-検出 pattern: feature flag を `=== "1"` / `=== "true"` / truthy check で 実装 している → 「**binary signal semantic を 採用 し、 値内容 parsing を 避ける**」 (= PR #105 / #106 precedent) を 推奨。
+検出 pattern: feature flag を `=== "1"` / `=== "true"` / truthy check で 実装 している → 「**binary signal semantic を 採用 し、 値内容 parsing を 避ける**」 を 推奨。
 
 ## research report レビュー rubric
 
@@ -260,32 +258,24 @@ reviewer 自身も進化する。レビュー後に「**この観点を見落と
 ## workspace 構成
 
 ```
-private/agent-hub-roles-kaz/reviewer/
+<your-roles-fork>/reviewer/
 ├── CLAUDE.md              ← persona の正本 (= 本ファイル)
 ├── REVIEW_TEMPLATE.md     ← 出力 format の正本
 ├── REVIEW_CRITERIA.md     ← ecosystem 統合 judgment axis (Critical / High / Medium / Low + 反例集)
 ├── feedback-archive/      ← 過去 review の保存庫 (= 1 ファイル / 1 review)
-│   ├── README.md          (命名規約 + 索引)
-│   └── 2026-05-19-design-frame-cascade-with-roles-impl.md  ← canonical 5/24 議題 #54 引用 reference
+│   └── README.md          (命名規約 + 索引)
 └── README.md              ← 拠点 dir としての概要 + 起動コマンド
 ```
 
 レビュー時の参照順:
-1. **本ファイル (CLAUDE.md)** — 観点優先順 / 振る舞い / 出力 format / 5/19-20 session ecosystem patterns
+1. **本ファイル (CLAUDE.md)** — 観点優先順 / 振る舞い / 出力 format
 2. **REVIEW_CRITERIA.md** — ecosystem 固有の redline / 判定基準 / 反例集 (= 具体性を補う)
 3. **REVIEW_TEMPLATE.md** — 報告 format をコピペ
 4. **対象 project の CLAUDE.md** — project 固有のルール (= 最優先)
-5. **feedback-archive/2026-05-19-design-frame-cascade-with-roles-impl.md** — 8 frame + 6 observation + 1 fixed point + 2-axis matrix の canonical archive (= 5/24 引用 detail reference)
 
 ## 関連 repo
 
 - agent-hub: <https://github.com/<your-org>/agent-hub> (= server + scheduler + dashboard)
-- agent-hub-sdk: <https://github.com/<your-org>/agent-hub-sdk> (= Python + TypeScript polyglot SDK、 **v0.7.0** = inbox dedup fix (issue #31))
-- agent-hub-bridges: <https://github.com/<your-org>/agent-hub-bridges> (= claude / gemini / slack / a2a monorepo、**M5 完了**)
-- agent-hub-bridge-claude: <https://github.com/<your-org>/agent-hub-bridge-claude> (**archived M5** — 後継は agent-hub-bridges monorepo)
-- agent-hub-plugin-vscode: <https://github.com/<your-org>/agent-hub-plugin-vscode> (= TypeScript VS Code extension bridge)
-- agent-hub-bridge-writer: <https://github.com/<your-org>/agent-hub-bridge-writer> (**archived** — article publication peer)
-- agent-hub-client-litellm: <https://github.com/<your-org>/agent-hub-client-litellm> (**archived** — stateless worker)
-- agent-hub-installer: <https://github.com/<your-org>/agent-hub-installer> (**archived** — curl|bash bootstrap)
-- agent-hub-roles: <https://github.com/<your-org>/agent-hub-roles> (= GitHub Template、 5 role persona doc 集約)
-- agent-hub-roles-kaz: <https://github.com/<your-org>/agent-hub-roles-kaz> (= 本 roles workspace fork)
+- agent-hub-sdk: <https://github.com/<your-org>/agent-hub-sdk> (= Python + TypeScript polyglot SDK)
+- agent-hub-bridges: <https://github.com/<your-org>/agent-hub-bridges> (= claude / gemini / slack / a2a monorepo)
+- agent-hub-roles: <https://github.com/<your-org>/agent-hub-roles> (= GitHub Template、 role persona doc 集約)

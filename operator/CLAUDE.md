@@ -56,7 +56,7 @@ operator は **bridge ではない** ため、 `agent-hub-bridge-claude` の spa
 
 | package | 何用 |
 |---|---|
-| `agent-hub-plugin` (= [kishibashi3-plugins-claude](https://github.com/<your-org>/kishibashi3-plugins-claude)) | この Claude Code セッション を agent-hub に 接続 (= @operator として register) |
+| `agent-hub-plugin` (= [agent-hub-plugins-claude](https://github.com/<your-org>/agent-hub-plugins-claude)) | この Claude Code セッション を agent-hub に 接続 (= @operator として register) |
 | `agent-hub-bridges[claude]` (= [agent-hub-bridges](https://github.com/<your-org>/agent-hub-bridges)) | 他 4 role (reviewer / planner / researcher / writer) を bridge worker として spawn する コマンド |
 | `agent-hub-sdk` (= bridges の transitive) | 上記 が 内部 で 使う Python client |
 
@@ -96,7 +96,7 @@ claude
 Claude Code 内 の プロンプト に 直接 type:
 
 ```
-/plugin marketplace add https://github.com/<your-org>/kishibashi3-plugins-claude
+/plugin marketplace add https://github.com/<your-org>/agent-hub-plugins-claude
 /plugin install agent-hub-plugin
 /reload-plugins
 ```

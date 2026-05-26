@@ -372,7 +372,7 @@ PR で response shape / API contract / env semantics が変わるとき、review
 
 ecosystem 内の consumer を全 grep:
 ```bash
-grep -r "<changed_symbol>" private/agent-hub-bridges private/agent-hub-plugin-vscode private/kishibashi3-plugins-claude
+grep -r "<changed_symbol>" private/agent-hub-bridges private/agent-hub-plugin-vscode private/agent-hub-plugins-claude
 # ※ M5 完了 (2026-05-21): standalone agent-hub-bridge-claude / -slack / -gemini は archive 済 → agent-hub-bridges monorepo に統合
 ```
 

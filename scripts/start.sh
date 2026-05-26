@@ -184,7 +184,7 @@ It is NOT spawned by this script. To register THIS shell's Claude Code as
 
   2. Install the agent-hub-plugin once (if not already):
        # inside Claude Code:
-       /plugin marketplace add https://github.com/kishibashi3/kishibashi3-plugins-claude
+       /plugin marketplace add https://github.com/kishibashi3/agent-hub-plugins-claude
        /plugin install agent-hub-plugin
        /reload-plugins
 
